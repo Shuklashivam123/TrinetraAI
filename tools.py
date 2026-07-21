@@ -8,6 +8,11 @@ from langchain_core.tools import tool
 from langchain.tools import tool
 import math
 
+# database.py
+from database import save_memory,search_memory
+from rag import retrieve_from_rag
+
+
 CURRENT_THREAD_ID="deafault"
 
 def set_current_thread_id(thread_id:str):
@@ -77,3 +82,45 @@ def calculator(expression: str) -> str:
         # instead of crashing the program.
         return f"Calculation error: {str(e)}"
 
+
+@tool
+def remember_this(memory:str)->str:
+    """
+    Save an important user preference or fact into long-term memory.
+    Use this when the user asks you to remember something.
+    """
+
+    return save_memory(
+        thread_id=CURRENT_THREAD_ID,
+        memory=memory
+    )
+
+
+@tool
+def recall_memory(query:str)->str:
+    """
+    Recall saved long-term memories about the user or this conversation.
+    """
+
+    return search_memory(
+       thread_id= CURRENT_THREAD_ID,
+       query=query
+    )
+
+# RAG tool from rag.py
+
+def search_uploaded_documents(query:str)->str:
+    """
+    Search uploaded documents for relevant information.
+    Use this when the user asks about uploaded PDFs, DOCX, TXT, notes, files, or documents.
+    """
+
+    return retrieve_from_rag(
+        query=query,
+        thread_id=CURRENT_THREAD_ID
+    )
+
+
+
+
+tools=[calculator,search_uploaded_documents,remember_this,recall_memory,web_search]

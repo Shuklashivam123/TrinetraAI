@@ -53,6 +53,8 @@ class ChatMessage(Base):
     # Message timestamp
     created_at = Column(DateTime, default=datetime.utcnow)
 
+
+
 # ==========================
 # Long Term Memory Table
 # Stores user preferences/facts permanently
@@ -71,8 +73,12 @@ class LongTermMemory(Base):
     # Memory creation time
     created_at = Column(DateTime, default=datetime.utcnow)
 
+
+
 def init_db():
     Base.metadata.create_all(bind=engine)
+
+
 
 def create_or_update_conversation(thread_id:str,first_message:str|None=None):
     db=SessionLocal()
@@ -107,6 +113,9 @@ def create_or_update_conversation(thread_id:str,first_message:str|None=None):
     finally:
         db.close()
 
+
+
+
 def list_conversations():
     db=SessionLocal()
 
@@ -119,6 +128,9 @@ def list_conversations():
         db.close()
 
 
+
+
+
 def save_chat_message(thread_id:str,role:str,content:str):
     db=SessionLocal()
 
@@ -126,7 +138,6 @@ def save_chat_message(thread_id:str,role:str,content:str):
         msg=ChatMessage(
             thread_id=thread_id,
             role=role,
-            content=content,
             content=content,
             created_at=datetime.utcnow()
         )
@@ -147,6 +158,8 @@ def save_chat_message(thread_id:str,role:str,content:str):
 
 
 
+
+
 def get_chat_history(thread_id:str):
     db=SessionLocal()
 
@@ -155,6 +168,8 @@ def get_chat_history(thread_id:str):
 
     finally:
         db.close()
+
+
 
 def save_memory(thread_id:str,memory:str):
     db=SessionLocal()
@@ -174,6 +189,8 @@ def save_memory(thread_id:str,memory:str):
 
     finally:
         db.close()
+
+
 
 
 # Retrieve saved memories
